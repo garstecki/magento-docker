@@ -1,0 +1,56 @@
+installer:
+  image: damiang/magento-installer
+  env_file:
+    - config.env
+    - local.env
+  volumes:
+    - ./database:/tmp/sql
+  volumes_from:
+    - nginx
+  links:
+    - "mysql:mysql"
+nginx:
+  image: damiang/magento-nginx
+  ports:
+    - "80:80"
+    - "443:443"
+  links:
+    - "php"
+  volumes:
+    - ./logs/nginx:/var/log/nginx
+  volumes_from:
+    - php
+php:
+  image: damiang/magento-php
+  links:
+    - "mysql:mysql"
+    - mailcatcher
+  volumes:
+    - .:/var/www/html
+mysql:
+  image: mysql:latest
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+  volumes:
+    - ./data/mysql:/var/lib/mysql
+node:
+  image: damiang/magento-node
+  volumes:
+    - ./web:/usr/src/app
+  command: bash -c "npm install && gulp build && gulp watch"
+mailcatcher:
+  image: yappabe/mailcatcher
+  ports:
+    - 1025:1025
+    - 1080:1080
+phpmyadmin:
+  image: phpmyadmin/phpmyadmin
+  ports:
+    - "8080:80"
+  links:
+    - "mysql:mysql"
+  environment:
+    PMA_HOST: "mysql"
+    PMA_PORT: 3306
