@@ -45,7 +45,7 @@ mailcatcher:
   ports:
     - 1025:1025
     - 1080:1080
-phpmyadmin:
+dbinterface:
   image: phpmyadmin/phpmyadmin
   ports:
     - "8080:80"
