@@ -65,7 +65,7 @@ reindex:
 
 ## Dump database, via magerun
 dump:
-	make mrun cmd="db:dump --compression="gzip" ../database/db.sql.gz"
+	make mrun cmd="db:dump --strip="@development" --compression="gzip" ../database/db.sql.gz"
 
 ## Run magerun command, pass the command as cmd, e.g: make mrun cmd=sys:store:list
 mrun:
